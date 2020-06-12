@@ -12,7 +12,6 @@ class MockKafkaProducer {
 
     fun run() {
         logger.info("Application starting")
-
         val message: String = "message goes here"
         MessageSender().send(message)
     }
