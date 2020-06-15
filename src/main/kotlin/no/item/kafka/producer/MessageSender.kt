@@ -8,13 +8,21 @@ import org.slf4j.LoggerFactory
 
 class MessageSender {
 
-    private val logger: Logger = LoggerFactory.getLogger(javaClass)
+  private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
-    fun send(message: String) {
-        val props: Properties = ApplicationProperties().getProperties()
-        val producer = KafkaProducer<String, String>(props)
-        producer.send(ProducerRecord(props.getProperty("topic"), message))
-        producer.close()
+  fun send(message: String) {
+    val props: Properties = getProperties()
+    val producer = KafkaProducer<String, String>(props)
+    while (true) {
+      try {
+        val result = producer.send(ProducerRecord(props.getProperty("topic"), message))
+        logger.debug("Sent a record")
+        Thread.sleep(500)
+        result.get()
         logger.info("Message sent")
+      } catch (ex: Exception) {
+        logger.info("exception occurred: " + ex.stackTrace)
+      }
     }
+  }
 }
