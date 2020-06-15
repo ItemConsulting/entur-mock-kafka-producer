@@ -13,7 +13,6 @@ class MessageSender {
     fun send(message: String) {
         val props: Properties = ApplicationProperties().getProperties()
         val producer = KafkaProducer<String, String>(props)
-
         producer.send(ProducerRecord(props.getProperty("topic"), message))
         producer.close()
         logger.info("Message sent")
