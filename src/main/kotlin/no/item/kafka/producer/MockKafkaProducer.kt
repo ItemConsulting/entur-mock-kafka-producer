@@ -16,3 +16,4 @@ class MockKafkaProducer {
         MessageSender().send(message)
     }
 }
+
