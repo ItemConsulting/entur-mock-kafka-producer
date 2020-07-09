@@ -13,13 +13,15 @@ class MessageSender {
   fun send(message: String) {
     val props: Properties = getProperties()
     val producer = KafkaProducer<String, String>(props)
+    var counter = 1
     while (true) {
       try {
-        val result = producer.send(ProducerRecord(props.getProperty("topic"), message))
+        val result = producer.send(ProducerRecord(props.getProperty("topic"), message.plus(counter.toString())))
         logger.debug("Sent a record")
         Thread.sleep(500)
         result.get()
         logger.info("Message sent")
+        counter += 1
       } catch (ex: Exception) {
         logger.info("exception occurred: " + ex.stackTrace)
       }
