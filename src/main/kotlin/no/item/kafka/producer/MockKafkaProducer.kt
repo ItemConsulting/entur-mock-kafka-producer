@@ -13,7 +13,7 @@ class MockKafkaProducer {
 
   fun run() {
     logger.info("Application starting")
-    val message = "This message is sent from a Kafka-producer: "
+    val message = "This message is sent from a Kafka-producer "
     MessageSender().send(message)
   }
 }
