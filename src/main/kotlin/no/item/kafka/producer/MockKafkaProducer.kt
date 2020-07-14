@@ -5,13 +5,7 @@ import org.slf4j.LoggerFactory
 import java.lang.Thread.sleep
 
 fun main(args: Array<String>) {
-  //MockKafkaProducer().run()
-  var i = 1
-  while(true){
-    println("hei " + i)
-    i++
-    sleep(500)
-  }
+  MockKafkaProducer().run()
 }
 
 class MockKafkaProducer {
@@ -20,7 +14,7 @@ class MockKafkaProducer {
 
   fun run() {
     logger.info("Application starting")
-    val message: String = "message goes here"
+    val message: String = "message"
     MessageSender().send(message)
   }
 }
