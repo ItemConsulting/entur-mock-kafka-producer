@@ -1,5 +1,6 @@
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.gradle.jvm.tasks.Jar
+import com.bmuschko.gradle.docker.tasks.image.*
 
 plugins {
     java
@@ -9,6 +10,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.61"
     id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
     kotlin("kapt") version "1.3.61"
+    id("com.bmuschko.docker-remote-api") version "6.5.0"
 }
 
 group = "no.item.kafka.producer"
@@ -68,16 +70,44 @@ val fatJar = task("fatJar", type = Jar::class) {
   with(tasks.jar.get() as CopySpec)
 }
 
-tasks {
-  build {
-    dependsOn(fatJar)
-  }
+val buildImage = task("buildImage", DockerBuildImage::class) {
+    inputDir.set(file("."))
+    images.add("054026012286.dkr.ecr.eu-north-1.amazonaws.com/entur-producer:latest")
+}
+
+val pushImage = task("pushImage", DockerPushImage::class) {
+  dependsOn(buildImage)
+  images.add("054026012286.dkr.ecr.eu-north-1.amazonaws.com/entur-producer:latest")
+}
+
+val dockerInit = task("dockerInit", Exec::class) {
+  workingDir = file(".")
+  commandLine = listOf("./docker-login.sh")
+}
+val dockerInitWin = task("dockerInitWin", Exec::class) {
+  workingDir = file(".")
+  commandLine = listOf("cmd", "/c", "docker-login.bat")
+}
+
+tasks.register("deploy"){
+    dependsOn(tasks.build)
+    dependsOn(pushImage)
+}
+
+tasks.register("docker-init") {
+  dependsOn(dockerInit)
+}
+
+tasks.register("docker-init-win") {
+  dependsOn(dockerInitWin)
 }
 
 tasks {
   startScripts {
-    dependsOn(fatJar)
     mainClassName ="no.item.kafka.producer.MockKafkaProducerKt"
   }
-}
 
+  build {
+    fatJar
+  }
+}
