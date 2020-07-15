@@ -2,6 +2,7 @@ package no.item.kafka.producer
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.lang.Thread.sleep
 
 fun main(args: Array<String>) {
   MockKafkaProducer().run()
