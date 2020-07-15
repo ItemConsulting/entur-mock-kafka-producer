@@ -1,6 +1,9 @@
 package no.item.kafka.producer
 
 import java.util.*
+import org.apache.kafka.clients.CommonClientConfigs
+import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.StringSerializer
 
 fun getProperties(): Properties {

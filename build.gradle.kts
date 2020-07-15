@@ -1,3 +1,4 @@
+import org.gradle.jvm.tasks.Jar
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import org.gradle.jvm.tasks.Jar
 import com.bmuschko.gradle.docker.tasks.image.*
