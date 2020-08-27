@@ -1,6 +1,6 @@
+import com.bmuschko.gradle.docker.tasks.image.*
 import org.gradle.jvm.tasks.Jar
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-import com.bmuschko.gradle.docker.tasks.image.*
 
 plugins {
     java
@@ -15,26 +15,18 @@ plugins {
 
 group = "no.item.kafka.producer"
 version = "1.0.0-SNAPSHOT"
-val arrowVersion = "0.10.4"
 
   repositories {
     mavenCentral()
     jcenter()
   }
 
-
   dependencies {
     implementation("org.apache.kafka:kafka-clients:2.0.0")
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("io.arrow-kt:arrow-core:$arrowVersion")
-    implementation("io.arrow-kt:arrow-syntax:$arrowVersion")
-    kapt("io.arrow-kt:arrow-meta:$arrowVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.8.11.1")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.8.9")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.1")
   }
 
   ktlint {
@@ -65,7 +57,7 @@ val fatJar = task("fatJar", type = Jar::class) {
     attributes["Implementation-Version"] = version
     attributes["Main-Class"] = "no.item.kafka.producer.MockKafkaProducerKt"
   }
-  exclude("META-INF/*.RSA", "META-INF/*.SF","META-INF/*.DSA")
+  exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
   from(configurations.runtimeClasspath.get().map({ if (it.isDirectory) it else zipTree(it) }))
   with(tasks.jar.get() as CopySpec)
 }
@@ -89,7 +81,7 @@ val dockerInitWin = task("dockerInitWin", Exec::class) {
   commandLine = listOf("cmd", "/c", "docker-login.bat")
 }
 
-tasks.register("deploy"){
+tasks.register("deploy") {
     dependsOn(tasks.build)
     dependsOn(pushImage)
 }
@@ -104,7 +96,7 @@ tasks.register("docker-init-win") {
 
 tasks {
   startScripts {
-    mainClassName ="no.item.kafka.producer.MockKafkaProducerKt"
+    mainClassName = "no.item.kafka.producer.MockKafkaProducerKt"
   }
 
   build {
