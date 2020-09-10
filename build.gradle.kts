@@ -64,12 +64,12 @@ val fatJar = task("fatJar", type = Jar::class) {
 
 val buildImage = task("buildImage", DockerBuildImage::class) {
     inputDir.set(file("."))
-    images.add("054026012286.dkr.ecr.eu-north-1.amazonaws.com/entur-producer:latest")
+    images.add("054026012286.dkr.ecr.eu-north-1.amazonaws.com/kafka-producer:latest")
 }
 
 val pushImage = task("pushImage", DockerPushImage::class) {
   dependsOn(buildImage)
-  images.add("054026012286.dkr.ecr.eu-north-1.amazonaws.com/entur-producer:latest")
+  images.add("054026012286.dkr.ecr.eu-north-1.amazonaws.com/kafka-producer:latest")
 }
 
 val dockerInit = task("dockerInit", Exec::class) {
